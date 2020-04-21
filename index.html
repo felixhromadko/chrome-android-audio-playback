@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body>
+
+<button style="width: 500px; height: 500px;font-size: 150px">Start</button>
+
+<script>
+    document.querySelector('button').onclick = start;
+    async function start() {
+        const audio = document.querySelector('audio');
+        document.write("downloading...")
+
+        //audio from https://longzijun.wordpress.com/2019/04/27/intro-25/
+        const mp3 = await (await fetch("audio.mp3")).arrayBuffer()
+
+        const context = new AudioContext();
+        document.write("parsing...")
+        const decodedBuffer = await context.decodeAudioData(mp3)
+
+        document.write("buffering...")
+        const source = context.createBufferSource();
+        source.buffer = decodedBuffer
+        source.connect(context.destination)
+        source.loop = true;
+        document.write("starting!")
+        source.start();
+    }
+
+
+    // //Load audio via XMLHttpRequest
+    // const oReq = new XMLHttpRequest();
+    // oReq.addEventListener("load", (audio) => {
+    //     audioTrack.sourceBuffer.appendBuffer(audio)
+    // });
+    // oReq.open("GET", "phantom_sage_the_light.mp3");
+</script>
+
+
+</body>
+</html>
